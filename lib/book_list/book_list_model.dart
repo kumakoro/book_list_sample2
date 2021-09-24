@@ -3,22 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:book_list_sample2/domain/cdtitle.dart';
 
 class BookListModel extends ChangeNotifier {
-  final Stream<QuerySnapshot> _usersStream =
-  FirebaseFirestore.instance.collection('cdlist').snapshots();
+  // _を先頭につけるとプライベートになるからこのクラス内でしか呼び出せなくなる。
+  // 特に呼ぶ必要がないものは_をつけたほうがいい
+  final _userCollection = FirebaseFirestore.instance.collection('cdlist');
 
   List<Cdtitle>? cdtitles = [];
 
-  void fetchBookList() {
-    _usersStream.listen((QuerySnapshot snapshot) {
-      final List<Cdtitle> cdtitles = snapshot.docs.map((DocumentSnapshot document) {
-        Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-        final String title = data['title'];
-        final String author = data['author'];
-        return Cdtitle(title, author);
-      }).toList();
+  void fetchBookList() async {
+
+    final QuerySnapshot snapshot = await _userCollection.get();
+    final List<Cdtitle> cdtitles = snapshot.docs.map((DocumentSnapshot document) {
+      Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      final String title = data['title'];
+      final String author = data['author'];
+      return Cdtitle(title, author);
+    }).toList();
+
     this.cdtitles = cdtitles;
     notifyListeners();
-        });
   }
 }
 

@@ -1,3 +1,4 @@
+import 'package:book_list_sample2/add_cd/add_cd_page.dart';
 import 'package:book_list_sample2/book_list/book_list_model.dart';
 import 'package:book_list_sample2/domain/cdtitle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -38,10 +39,34 @@ class BookListPage extends StatelessWidget {
             );
           }),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: null,
-          tooltip: 'Increment',
-          child: Icon(Icons.add),
+        floatingActionButton: Consumer<BookListModel>(builder: (context, model, child) {
+            return FloatingActionButton(
+              onPressed: () async {
+                //画面遷移
+                final bool? added =
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => AddCdListPage(),
+                      fullscreenDialog: true,
+                  ),
+                );
+
+                if(added != null && added) {
+                  final snackBar = SnackBar(
+                    backgroundColor: Colors.green,
+                    content: Text('追加成功')
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                }
+
+                model.fetchBookList();
+              },
+              tooltip: 'Increment',
+              child: Icon(Icons.add),
+            );
+          }
         ), // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
