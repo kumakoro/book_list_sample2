@@ -1,7 +1,8 @@
 class Cdtitle {
 
-  Cdtitle(this.title, this.author);
+  Cdtitle(this.id,this.title, this.author);
 
+  String id;
   String title;
   String author;
 

@@ -14,13 +14,18 @@ class BookListModel extends ChangeNotifier {
     final QuerySnapshot snapshot = await _userCollection.get();
     final List<Cdtitle> cdtitles = snapshot.docs.map((DocumentSnapshot document) {
       Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+      final String id = document.id;
       final String title = data['title'];
       final String author = data['author'];
-      return Cdtitle(title, author);
+      return Cdtitle(id,title, author);
     }).toList();
 
     this.cdtitles = cdtitles;
     notifyListeners();
+  }
+
+  Future deleteCd(Cdtitle cdtitles){
+    return FirebaseFirestore.instance.collection('cdlist').doc(cdtitles.id).delete();
   }
 }
 
