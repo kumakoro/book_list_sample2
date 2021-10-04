@@ -54,6 +54,19 @@ class EditCdListPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 8,),
 
+                  TextField(
+                    controller : model.imageURLController,
+                    decoration: const InputDecoration(
+                      hintText: 'ここにタイトル名を入れてください',
+                    ),
+                    onChanged: (text){
+                      //ここで取得したテキストを使う
+                      //model.author = text;
+                      model.setImageURL(text);
+                    },
+                  ),
+                  const SizedBox(height: 8,),
+
                   ElevatedButton(
                       onPressed: model.isUpdated() ? () async {
                         try {

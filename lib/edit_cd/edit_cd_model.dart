@@ -7,13 +7,16 @@ class EditCdListModel extends ChangeNotifier {
   EditCdListModel(this.cdtitles) {
     titleController.text = cdtitles.title;
     authorController.text = cdtitles.author;
+    imageURLController.text = cdtitles.imageURL!;
   }
 
   final titleController = TextEditingController();
   final authorController = TextEditingController();
+  final imageURLController = TextEditingController();
 
   String? title;
   String? author;
+  String? imageURL;
 
   void setTitle (String title){
     this.title = title;
@@ -25,6 +28,12 @@ class EditCdListModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void setImageURL (String imageURL){
+    this.title = imageURL;
+    notifyListeners();
+  }
+
+
 
   bool isUpdated(){
     return title != null || author != null;
@@ -34,11 +43,13 @@ class EditCdListModel extends ChangeNotifier {
 
     this.title = titleController.text;
     this.author = authorController.text;
+    this.imageURL = imageURLController.text;
 
     //FireStoreについか
     await FirebaseFirestore.instance.collection('cdlist').doc(cdtitles.id).update({
       'title' : title,
       'author': author,
+      'imageURL': imageURL,
     });
 
   }
